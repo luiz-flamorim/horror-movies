@@ -1,0 +1,1 @@
+var apiKey = '22cd95bc60ccb0501a91352660dbe78e'
