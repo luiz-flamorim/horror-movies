@@ -1,35 +1,3 @@
-.film__card{
-    display: flex;
-}
-
-.film__card .card__wrapper {
-    margin-bottom: 10%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap; justify-content: space-between;
-    padding: 5%;
-    background-color: rgb(245, 245, 245);
-}
-
-.card__wrapper h4{
-        color: brown;
-        margin-top: 16px;
-    
-}
-
-.my__button{
-    font-size: small;
-    /* margin: 2%; */
-    display: flex;
-    /* border-radius: 5%; */
-}
-
-.button__div{
-    display: flex;
-    justify-content: space-between;
-
-}
-
 .close__btn{
     background: rgb(206, 206, 206);
     padding: 0.5em;
@@ -57,21 +25,17 @@
 
 .popup__content{
     background-color: white;
-    margin: 30% auto;
+    margin: 20% auto;
     padding: 2%;
     width: 50%;
     box-shadow: 0 5 8 0 rgba(0,0,0,0.5),0 7 20 0 rgba(0,0,0,0.8);
 }
 
-.close__btn{
-    color:white ;
+.btn-close{
     float: right;
-    font-size: 20px;
 }
 
-.close__btn:hover{
-    cursor: pointer;
-}
+
 
 .poster{
     filter: saturate(0.2);
@@ -84,4 +48,9 @@
 @keyframes animation__popup{
     from{opacity:0}
     to{opacity: 1;}
+}
+
+h6{
+    font-size: small;
+    color: grey;
 }

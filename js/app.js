@@ -3,7 +3,7 @@
 
 //selectors
 const domBody = document.querySelector('body')
-const filmsContainer = document.querySelector('#filmsDiv .row')
+const filmsContainer = document.querySelector('#filmsDiv')
 const searchButton = document.querySelector('#searchButton')
 const searchField = document.querySelector('#userInput')
 // const filmsDivSelector = document.querySelector('#filmsDiv .row')
@@ -33,7 +33,6 @@ function discoverFilms(url) {
 
 function searchFilm(url) {
     searchButton.addEventListener('click', (event) => {
-
         if (searchField.value != '') {
             // console.log('search field value: ' + searchField.value)
             filmsContainer.innerHTML = ''
@@ -59,6 +58,7 @@ function filmsDataParser(url){
                             let year = (data.results[j].release_date).split('-').reverse().join('/')
                             let overview = data.results[j].overview
                             let poster = 'https://image.tmdb.org/t/p/w200/' + data.results[j].poster_path; //sizes: "w92", "w154", "w185", "w342", "w500", "w780", "original"
+                            
                             if(data.results[j].poster_path == null){
                                 //replace this image by a random from Unsplash API
                                 poster = 'https://images.unsplash.com/photo-1505635552518-3448ff116af3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1001&q=80'
@@ -76,51 +76,49 @@ function filmsDataParser(url){
 function cardBuilder(id, title, year, overview, poster) {
 
     let wrapper = document.createElement('div');
-    wrapper.setAttribute("class", "col-md-2 film__card");
+    wrapper.setAttribute("class", "col-sm-3 col-md-4 col-lg-2 h-100");
+    wrapper.setAttribute("style", "card");
     wrapper.setAttribute("id", id);
     filmsContainer.appendChild(wrapper);
 
-    let cardWrap = document.createElement('div');
-    cardWrap.setAttribute("class", "card__wrapper");
-    wrapper.appendChild(cardWrap);
-
-    let cardInfo = document.createElement('div');
-    cardInfo.setAttribute("class", "card__info");
-    cardWrap.appendChild(cardInfo);
-
+   
     let filmPoster = document.createElement('img');
     filmPoster.setAttribute("src", poster);
-    filmPoster.setAttribute("class", "card-img-top poster");
+    filmPoster.setAttribute("class", "card-img-top img-fluid");
     filmPoster.addEventListener('click', (event) => {
         filmDetail(id, title, year, overview, poster);
     })
-    cardInfo.appendChild(filmPoster);
+    wrapper.appendChild(filmPoster);
 
-    let filmTitle = document.createElement('h4');
+    let cardInfo = document.createElement('div');
+    cardInfo.setAttribute("class", "card-body flex-column");
+    wrapper.appendChild(cardInfo);
+
+    let filmTitle = document.createElement('h5');
     filmTitle.setAttribute("class", "card-title")
     filmTitle.innerHTML = title
     cardInfo.appendChild(filmTitle);
 
-    let filmYear = document.createElement('p');
-    filmYear.setAttribute("class", "card-subtitle text-muted")
+    let filmYear = document.createElement('small');
+    filmYear.setAttribute("class", "text-muted")
     filmYear.innerHTML = 'Released on ' + year;
     cardInfo.appendChild(filmYear);
 
-    let buttonsDiv = document.createElement('div')
-    buttonsDiv.setAttribute('class','button__div')
-    cardWrap.appendChild(buttonsDiv)
+    let footer = document.createElement('div')
+    footer.setAttribute("class","d-grid gap-2 d-md-block")
+    wrapper.appendChild(footer)
 
-    let buttonWhishlist = document.createElement('a')
-    buttonWhishlist.setAttribute('class', 'btn btn-primary my__button')
+    let buttonWhishlist = document.createElement('button')
+    buttonWhishlist.setAttribute('class', 'btn btn-primary me-md-2 btn-sm')
     buttonWhishlist.setAttribute('href', '#')
-    buttonWhishlist.innerHTML = '+ wishlist'
-    buttonsDiv.appendChild(buttonWhishlist)
+    buttonWhishlist.innerHTML = '+ Add'
+    footer.appendChild(buttonWhishlist)
 
-    let buttonWatched = document.createElement('a')
-    buttonWatched.setAttribute('class', 'btn btn-primary my__button')
+    let buttonWatched = document.createElement('button')
+    buttonWatched.setAttribute('class', 'btn btn-primary me-md-2 btn-sm')
     buttonWatched.setAttribute('href', '#')
     buttonWatched.innerHTML = 'watched'
-    buttonsDiv.appendChild(buttonWatched)
+    footer.appendChild(buttonWatched)
 
 }
 
@@ -137,6 +135,11 @@ function filmDetail(id) {
             let year = (data.release_date).split('-').reverse().join('/')
             let poster = 'https://image.tmdb.org/t/p/w200/' + data.poster_path;
 
+            if(data.poster_path == null){
+                //replace this image by a random from Unsplash API
+                poster = 'https://images.unsplash.com/photo-1505635552518-3448ff116af3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'
+            }
+
 
             filmPopUp(id,title,originalTitle,overview,year,poster)
         })
@@ -147,18 +150,24 @@ function filmPopUp(id,title,originalTitle,overview,year,poster){
 
     console.log('clicked on: ' + id + ' ' + title + ' | ' + overview)
  
+    //Modal: entire window
     let popUp = document.createElement('div')
-    popUp.setAttribute('class','pop__up')
+    popUp.setAttribute('class','pop__up modal-dialog-centered')
     popUp.setAttribute('id',('pop-up'+id))
     domBody.appendChild(popUp)
 
+    //pop up
     let popUpContent = document.createElement('div')
-    popUpContent.setAttribute('class','popup__content')
+    popUpContent.setAttribute('class','row popup__content  g-0')
     popUp.appendChild(popUpContent)
 
-    let closeBtn = document.createElement('span')
-    closeBtn.setAttribute('class','close__btn')
-    closeBtn.innerHTML = '&times;'
+    //buttons
+    let buttonDiv = document.createElement('div')
+    buttonDiv.setAttribute('class','row')
+    popUpContent.appendChild(buttonDiv)
+
+    let closeBtn = document.createElement('button')
+    closeBtn.setAttribute('class','btn-close')
     closeBtn.addEventListener('click',(event) => {
         popUp.style.display = 'none'
     })
@@ -171,20 +180,35 @@ function filmPopUp(id,title,originalTitle,overview,year,poster){
     })
     popUp.style.display = 'block';
 
+    // Image Div
+    let imgDiv = document.createElement('div')
+    imgDiv.setAttribute('class','col-md-4')
+    popUpContent.appendChild(imgDiv)
+
     let popUpPoster = document.createElement('img')
     popUpPoster.setAttribute("src", poster)
-    popUpPoster.setAttribute("class", "popup__poster")
-    popUpContent.appendChild(popUpPoster)
+    imgDiv.appendChild(popUpPoster)
+
+    // Content Div
+    let contentDiv = document.createElement('div')
+    contentDiv.setAttribute('class','col-md-8')
+    popUpContent.appendChild(contentDiv)
 
     let popUpTitle = document.createElement('h3')
-    popUpTitle.setAttribute('class','popup__header')
+    popUpTitle.setAttribute('class','col-auto')
     popUpTitle.innerHTML = title
-    popUpContent.appendChild(popUpTitle)
+    contentDiv.appendChild(popUpTitle)
+
+    let popUpYear = document.createElement('h6')
+    popUpYear.setAttribute('class','col-auto')
+    popUpYear.innerHTML = year
+    contentDiv.appendChild(popUpYear)
     
     let popUpOverview = document.createElement('p')
-    popUpOverview.setAttribute('class','popUpP')
+    popUpOverview.setAttribute('class','col-auto')
     popUpOverview.innerHTML = overview
-    popUpContent.appendChild(popUpOverview)
+    contentDiv.appendChild(popUpOverview)
+
+
 
 }
-
