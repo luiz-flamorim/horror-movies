@@ -182,7 +182,7 @@ function filmPopUp(id,title,originalTitle,overview,year,poster){
 
     // Image Div
     let imgDiv = document.createElement('div')
-    imgDiv.setAttribute('class','col-md-4')
+    imgDiv.setAttribute('class','col-md-4 col-lg-2')
     popUpContent.appendChild(imgDiv)
 
     let popUpPoster = document.createElement('img')
@@ -191,22 +191,27 @@ function filmPopUp(id,title,originalTitle,overview,year,poster){
 
     // Content Div
     let contentDiv = document.createElement('div')
-    contentDiv.setAttribute('class','col-md-8')
+    contentDiv.setAttribute('class','row gx-2 align-content-center col-md-8')
     popUpContent.appendChild(contentDiv)
 
     let popUpTitle = document.createElement('h3')
-    popUpTitle.setAttribute('class','col-auto')
+    popUpTitle.setAttribute('class','col-12')
     popUpTitle.innerHTML = title
     contentDiv.appendChild(popUpTitle)
 
+    let popUpOtitle = document.createElement('h5')
+    popUpOtitle.setAttribute('class','col-12')
+    popUpOtitle.innerHTML = 'Original title: ' + originalTitle
+    contentDiv.appendChild(popUpOtitle)
+
     let popUpYear = document.createElement('h6')
     popUpYear.setAttribute('class','col-auto')
-    popUpYear.innerHTML = year
+    popUpYear.innerHTML = 'Film released on ' + year
     contentDiv.appendChild(popUpYear)
     
     let popUpOverview = document.createElement('p')
     popUpOverview.setAttribute('class','col-auto')
-    popUpOverview.innerHTML = overview
+    popUpOverview.innerHTML = '<b>Overview: </b>' + overview
     contentDiv.appendChild(popUpOverview)
 
 
